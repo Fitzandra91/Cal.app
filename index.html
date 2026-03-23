@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<!-- ================================================================
+     Cal.app – A Simple Calculator Application
+     ================================================================
+     DOCTYPE declaration:
+       Tells the browser this document follows the HTML5 standard.
+       Without it, some browsers fall back to "quirks mode" and may
+       render the page incorrectly.
+     ================================================================ -->
+
+<!-- ----------------------------------------------------------------
+     <html lang="en">
+       The root element that wraps the entire page.
+       lang="en" declares the document language as English.
+       This helps screen readers pronounce words correctly and allows
+       search engines to understand the content language.
+     ---------------------------------------------------------------- -->
+<html lang="en">
+
+<!-- ================================================================
+     HEAD SECTION
+     The <head> contains metadata – information ABOUT the page that
+     is not directly visible to the user in the browser viewport.
+     ================================================================ -->
+<head>
+
+  <!-- ---------------------------------------------------------------
+       Character Encoding Declaration
+       charset="UTF-8" tells the browser to decode the file using
+       the UTF-8 encoding, which supports virtually every character
+       in every language (including emoji, maths symbols, etc.).
+       This MUST be the first tag inside <head> so the browser sees
+       it before reading any other content.
+       --------------------------------------------------------------- -->
+  <meta charset="UTF-8">
+
+  <!-- ---------------------------------------------------------------
+       Viewport Meta Tag (Responsive Design)
+       Without this tag, mobile browsers render the page at a desktop
+       width (~980 px) and shrink it to fit – making text tiny.
+       - "width=device-width"  → use the actual screen width in CSS pixels
+       - "initial-scale=1.0"   → do not zoom in or out on first load
+       --------------------------------------------------------------- -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ---------------------------------------------------------------
+       Page Description Meta Tag
+       Provides a short summary of the page's purpose.
+       Search engines often use this text as the snippet shown in
+       search results. It does not affect the visible page content.
+       --------------------------------------------------------------- -->
+  <meta name="description" content="A simple, clean calculator application built with HTML, CSS, and JavaScript.">
+
+  <!-- ---------------------------------------------------------------
+       Author Meta Tag
+       Declares the author of the page for SEO and attribution.
+       --------------------------------------------------------------- -->
+  <meta name="author" content="Cal.app">
+
+  <!-- ---------------------------------------------------------------
+       Page Title
+       The text that appears in the browser tab and in bookmarks.
+       It is also the most important on-page SEO signal.
+       --------------------------------------------------------------- -->
+  <title>Cal.app – Calculator</title>
+
+  <!-- ---------------------------------------------------------------
+       External Stylesheet Link
+       <link rel="stylesheet" href="style.css"> connects this HTML
+       file to the external CSS file that controls all visual styling.
+       - rel="stylesheet"  → tells the browser this is a CSS file
+       - href="style.css"  → the relative path to the CSS file
+       The browser loads the CSS before rendering the page, so there
+       is no unstyled "flash" of content.
+       --------------------------------------------------------------- -->
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<!-- End of <head> section -->
+
+<!-- ================================================================
+     BODY SECTION
+     Everything inside <body> is what the user sees and interacts
+     with in the browser window.
+     ================================================================ -->
+<body>
+
+  <!-- ================================================================
+       CALCULATOR CONTAINER
+       <div class="calculator"> is the outermost wrapper for the whole
+       calculator widget.
+       Using a <div> (division/generic container) keeps the markup
+       semantic – it groups related elements without implying meaning.
+       The class "calculator" lets style.css target this element to
+       apply the card-like appearance (background, shadow, border-radius).
+       ================================================================ -->
+  <div class="calculator" role="application" aria-label="Calculator">
+  <!-- role="application" hints to assistive technology that this is
+       an interactive widget, not static content.
+       aria-label gives it a human-readable name for screen readers. -->
+
+    <!-- ============================================================
+         DISPLAY SECTION
+         The <div class="display"> holds the two lines of output:
+           1. The previous expression (e.g. "12 + 7 =")
+           2. The current value being entered or computed result
+         It sits at the top of the calculator, just like a physical
+         calculator's LCD screen.
+         ============================================================ -->
+    <div class="display" aria-live="polite" aria-atomic="true">
+    <!-- aria-live="polite" tells screen readers to announce changes
+         when the user is idle (non-disruptive).
+         aria-atomic="true" means the whole region is announced as a
+         unit, not character by character. -->
+
+      <!-- ----------------------------------------------------------
+           Previous Expression Line
+           <span class="previous-expression"> displays the last
+           complete calculation (e.g. "8 × 4 =") in small, dimmed
+           text. It is empty until the user presses "=".
+           Using a <span> (inline container) inside the block-level
+           <div> allows us to style just this text independently.
+           ---------------------------------------------------------- -->
+      <span class="previous-expression" aria-label="Previous expression"></span>
+
+      <!-- ----------------------------------------------------------
+           Current Value / Result
+           <span class="current-value"> shows the number the user is
+           currently typing, or the result after pressing "=".
+           JavaScript updates this element's textContent on every
+           key press or button click.
+           ---------------------------------------------------------- -->
+      <span class="current-value" aria-label="Current value">0</span>
+      <!-- The initial "0" ensures the display is not blank on load -->
+
+    </div>
+    <!-- End of .display -->
+
+    <!-- ============================================================
+         BUTTONS SECTION
+         <div class="buttons"> is a CSS Grid container that holds all
+         16 calculator buttons, laid out in a 4×4 grid.
+         Buttons are grouped logically:
+           Row 1: AC, +/−, %, ÷       (utility / operator)
+           Row 2: 7, 8, 9, ×          (digits / operator)
+           Row 3: 4, 5, 6, −          (digits / operator)
+           Row 4: 1, 2, 3, +          (digits / operator)
+           Row 5: 0 (wide), ., =      (digit / decimal / equals)
+         ============================================================ -->
+    <div class="buttons">
+
+      <!-- ============================================================
+           ROW 1 – Utility and Division Buttons
+           ============================================================ -->
+
+      <!-- AC (All Clear) Button
+           Resets the calculator completely – clears all state.
+           class "btn-special" gives it the muted grey/blue colour.
+           onclick="allClear()" calls the allClear() function defined
+           in script.js when this button is clicked.
+           aria-label="All clear" gives screen readers a descriptive
+           label rather than just reading the letter "AC". -->
+      <button class="btn-special"
+              onclick="allClear()"
+              aria-label="All clear">AC</button>
+
+      <!-- +/− (Toggle Sign) Button
+           Flips the sign of the displayed number between positive
+           and negative (e.g. 5 → -5 → 5).
+           onclick="toggleSign()" calls toggleSign() in script.js.
+           The HTML entity &plusmn; renders the ± symbol. -->
+      <button class="btn-special"
+              onclick="toggleSign()"
+              aria-label="Toggle positive or negative">&plusmn;</button>
+
+      <!-- % (Percentage) Button
+           Divides the current number by 100.
+           Useful for expressions like "What is 15% of 80?".
+           onclick="applyPercentage()" calls applyPercentage() in script.js. -->
+      <button class="btn-special"
+              onclick="applyPercentage()"
+              aria-label="Percentage">%</button>
+
+      <!-- ÷ (Division) Operator Button
+           Sets the operator to division.
+           class "btn-operator" gives it the lavender operator colour.
+           onclick="setOperator('/')" calls setOperator with '/'.
+           The HTML entity &divide; renders the ÷ symbol. -->
+      <button class="btn-operator"
+              onclick="setOperator('/')"
+              aria-label="Divide">&divide;</button>
+
+      <!-- ============================================================
+           ROW 2 – Digits 7, 8, 9 and Multiplication Operator
+           ============================================================ -->
+
+      <!-- Digit 7 Button
+           Appends the character '7' to the current input.
+           onclick="appendDigit('7')" calls appendDigit in script.js. -->
+      <button onclick="appendDigit('7')"
+              aria-label="Seven">7</button>
+
+      <!-- Digit 8 Button -->
+      <button onclick="appendDigit('8')"
+              aria-label="Eight">8</button>
+
+      <!-- Digit 9 Button -->
+      <button onclick="appendDigit('9')"
+              aria-label="Nine">9</button>
+
+      <!-- × (Multiplication) Operator Button
+           Sets the operator to multiplication.
+           The HTML entity &times; renders the × symbol. -->
+      <button class="btn-operator"
+              onclick="setOperator('*')"
+              aria-label="Multiply">&times;</button>
+
+      <!-- ============================================================
+           ROW 3 – Digits 4, 5, 6 and Subtraction Operator
+           ============================================================ -->
+
+      <!-- Digit 4 Button -->
+      <button onclick="appendDigit('4')"
+              aria-label="Four">4</button>
+
+      <!-- Digit 5 Button -->
+      <button onclick="appendDigit('5')"
+              aria-label="Five">5</button>
+
+      <!-- Digit 6 Button -->
+      <button onclick="appendDigit('6')"
+              aria-label="Six">6</button>
+
+      <!-- − (Subtraction) Operator Button
+           The HTML entity &minus; renders the proper minus sign (−),
+           which looks slightly different from a hyphen (-). -->
+      <button class="btn-operator"
+              onclick="setOperator('-')"
+              aria-label="Subtract">&minus;</button>
+
+      <!-- ============================================================
+           ROW 4 – Digits 1, 2, 3 and Addition Operator
+           ============================================================ -->
+
+      <!-- Digit 1 Button -->
+      <button onclick="appendDigit('1')"
+              aria-label="One">1</button>
+
+      <!-- Digit 2 Button -->
+      <button onclick="appendDigit('2')"
+              aria-label="Two">2</button>
+
+      <!-- Digit 3 Button -->
+      <button onclick="appendDigit('3')"
+              aria-label="Three">3</button>
+
+      <!-- + (Addition) Operator Button -->
+      <button class="btn-operator"
+              onclick="setOperator('+')"
+              aria-label="Add">+</button>
+
+      <!-- ============================================================
+           ROW 5 – Zero (Wide), Decimal Point, and Equals
+           ============================================================ -->
+
+      <!-- Digit 0 Button (Wide)
+           class "btn-wide" makes this button span two grid columns
+           (defined in style.css with grid-column: span 2) to match
+           the layout of a standard physical calculator. -->
+      <button class="btn-wide"
+              onclick="appendDigit('0')"
+              aria-label="Zero">0</button>
+
+      <!-- Decimal Point Button
+           Appends a decimal point to the current number.
+           The appendDigit function guards against adding a second "."
+           to a number that already contains one. -->
+      <button onclick="appendDigit('.')"
+              aria-label="Decimal point">.</button>
+
+      <!-- = (Equals) Button
+           Triggers the calculation of the current expression.
+           class "btn-equals" gives it the vivid purple accent colour
+           that makes it the most visually prominent button.
+           onclick="calculate()" calls the calculate() function in script.js. -->
+      <button class="btn-equals"
+              onclick="calculate()"
+              aria-label="Equals">=</button>
+
+    </div>
+    <!-- End of .buttons -->
+
+  </div>
+  <!-- End of .calculator -->
+
+  <!-- ================================================================
+       SCRIPT TAG
+       <script src="script.js"> loads the external JavaScript file
+       that provides all the calculator's interactive behaviour.
+       - src="script.js"  → the relative path to the JS file
+       Placing the <script> at the END of <body> (rather than in
+       <head>) ensures the HTML elements above have already been
+       parsed and are available in the DOM before the script runs.
+       Without this order, querySelector calls in script.js would
+       return null because the elements would not exist yet.
+       ================================================================ -->
+  <script src="script.js"></script>
+
+</body>
+<!-- End of <body> -->
+
+</html>
+<!-- End of HTML document -->
