@@ -1,0 +1,371 @@
+/* ============================================================
+   style.css – Styles for Cal.app Calculator
+   Theme  : Pink & Purple accents, White background, Black bold text
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   1. CSS CUSTOM PROPERTIES (design tokens)
+   Centralises colours and sizes so changes are easy.
+   ---------------------------------------------------------- */
+:root {
+  /* Primary accent colours */
+  --color-pink:        #e91e8c;   /* Vivid pink  – operator buttons  */
+  --color-purple:      #7b2ff7;   /* Deep purple – equals button      */
+  --color-pink-light:  #fce4f3;   /* Pale pink   – action buttons     */
+  --color-purple-light:#ede7fd;   /* Pale purple – hover tint          */
+
+  /* Background colours */
+  --color-bg-page:     #ffffff;   /* Page background – white           */
+  --color-bg-card:     #ffffff;   /* Calculator card – white           */
+  --color-bg-display:  #f9f0ff;   /* Display panel – very light purple */
+  --color-bg-number:   #f5f5f5;   /* Number buttons – off-white        */
+
+  /* Text colours */
+  --color-text-dark:   #111111;   /* Primary text – near-black         */
+  --color-text-light:  #ffffff;   /* Text on dark/coloured buttons     */
+
+  /* Hover / dark variants of accent colours */
+  --color-pink-hover:   #f9c8e8;  /* Action button hover – lighter pink    */
+  --color-pink-dark:    #c9176e;  /* Operator button hover – darker pink   */
+  --color-purple-dark:  #5e1bc9;  /* Equals button hover – darker purple   */
+
+  /* Expression row text colour */
+  --color-expression:   #9b59b6;  /* Muted purple for the secondary row    */
+
+  /* Shadows */
+  --shadow-card:  0 8px 32px rgba(123, 47, 247, 0.18);
+  --shadow-btn:   0 2px 8px  rgba(123, 47, 247, 0.12);
+
+  /* Border radius */
+  --radius-card:  24px;
+  --radius-btn:   16px;
+
+  /* Typography */
+  --font-family: 'Segoe UI', Arial, sans-serif;
+  --font-weight-bold: 700;
+}
+
+/* ----------------------------------------------------------
+   2. RESET / BASE
+   Removes default browser margins and sets box-sizing.
+   ---------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ----------------------------------------------------------
+   3. BODY
+   Full-viewport background and flex centering.
+   ---------------------------------------------------------- */
+body {
+  /* White background as required */
+  background-color: var(--color-bg-page);
+
+  /* Subtle pink-to-purple gradient overlay adds depth */
+  background-image: linear-gradient(
+    135deg,
+    rgba(233, 30, 140, 0.06) 0%,
+    rgba(123, 47, 247, 0.10) 100%
+  );
+
+  /* Minimum full viewport height */
+  min-height: 100vh;
+
+  /* Centre the calculator card both axes */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Base typography – bold black as required */
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-dark);
+}
+
+/* ----------------------------------------------------------
+   4. PAGE WRAPPER
+   Provides padding on small screens.
+   ---------------------------------------------------------- */
+.page-wrapper {
+  padding: 16px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* ----------------------------------------------------------
+   5. CALCULATOR CARD
+   White card with purple shadow and rounded corners.
+   ---------------------------------------------------------- */
+.calculator {
+  /* Fixed width keeps the layout tight and precise */
+  width: 340px;
+
+  /* White background for the card */
+  background-color: var(--color-bg-card);
+
+  /* Rounded corners */
+  border-radius: var(--radius-card);
+
+  /* Coloured shadow for depth */
+  box-shadow: var(--shadow-card);
+
+  /* Internal spacing */
+  padding: 28px 24px 24px;
+
+  /* Stack children vertically */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ----------------------------------------------------------
+   6. APP TITLE
+   Bold heading rendered in the pink-to-purple gradient.
+   ---------------------------------------------------------- */
+.app-title {
+  /* Horizontally centred */
+  text-align: center;
+
+  /* Large, bold */
+  font-size: 1.6rem;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 1px;
+
+  /* Pink-to-purple gradient text effect */
+  background: linear-gradient(90deg, var(--color-pink), var(--color-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ----------------------------------------------------------
+   7. DISPLAY PANEL
+   Shows the ongoing expression and current number/result.
+   ---------------------------------------------------------- */
+.display {
+  /* Light purple background for the display area */
+  background-color: var(--color-bg-display);
+
+  /* Rounded corners matching the card */
+  border-radius: 16px;
+
+  /* Internal padding */
+  padding: 16px 20px 12px;
+
+  /* Align text to the right (like a real calculator) */
+  text-align: right;
+
+  /* Keep content from overflowing */
+  overflow: hidden;
+}
+
+/* Secondary row – the running expression (smaller text) */
+.display__expression {
+  font-size: 0.95rem;
+  font-weight: var(--font-weight-bold);
+
+  /* Slightly muted colour so it doesn't compete with the result */
+  color: var(--color-expression);
+
+  /* Minimum height keeps the layout stable when empty */
+  min-height: 1.4em;
+
+  /* Truncate very long expressions with ellipsis */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Primary row – current value / result (large text) */
+.display__result {
+  font-size: 2.6rem;
+  font-weight: var(--font-weight-bold);
+
+  /* Black text as required */
+  color: var(--color-text-dark);
+
+  /* Adjust line height so numbers sit naturally */
+  line-height: 1.2;
+
+  /* Truncate very long numbers */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ----------------------------------------------------------
+   8. BUTTON GRID
+   4-column grid that holds all calculator buttons.
+   ---------------------------------------------------------- */
+.button-grid {
+  /* 4 equal columns */
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+
+  /* Uniform gap between cells */
+  gap: 12px;
+}
+
+/* ----------------------------------------------------------
+   9. BASE BUTTON STYLES
+   All buttons share these common styles.
+   ---------------------------------------------------------- */
+.btn {
+  /* Remove default button appearance */
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  /* Shared sizing */
+  height: 64px;
+  border-radius: var(--radius-btn);
+
+  /* Bold black text as required */
+  font-size: 1.15rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-dark);
+
+  /* Smooth transitions for hover/active states */
+  transition: transform 0.1s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+
+  /* Subtle shadow on every button */
+  box-shadow: var(--shadow-btn);
+}
+
+/* Hover: lift the button slightly */
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(123, 47, 247, 0.18);
+}
+
+/* Active / pressed: push the button down */
+.btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 4px rgba(123, 47, 247, 0.12);
+}
+
+/* ----------------------------------------------------------
+   10. NUMBER BUTTONS
+   Off-white background, dark bold text.
+   ---------------------------------------------------------- */
+.btn--number {
+  background-color: var(--color-bg-number);
+}
+
+/* Hover tint – pale purple for numbers */
+.btn--number:hover {
+  background-color: var(--color-purple-light);
+}
+
+/* ----------------------------------------------------------
+   11. ACTION BUTTONS (AC, +/−, %)
+   Pale pink background to distinguish them from numbers.
+   ---------------------------------------------------------- */
+.btn--action {
+  background-color: var(--color-pink-light);
+
+  /* Use the pink colour for text */
+  color: var(--color-pink);
+}
+
+/* Darker pink on hover */
+.btn--action:hover {
+  background-color: var(--color-pink-hover);
+}
+
+/* ----------------------------------------------------------
+   12. OPERATOR BUTTONS (÷ × − +)
+   Solid vivid pink background, white text.
+   ---------------------------------------------------------- */
+.btn--operator {
+  /* Pink fill */
+  background-color: var(--color-pink);
+
+  /* White text for contrast */
+  color: var(--color-text-light);
+
+  /* Slightly larger operator symbols */
+  font-size: 1.3rem;
+}
+
+/* Darken pink on hover */
+.btn--operator:hover {
+  background-color: var(--color-pink-dark);
+}
+
+/* Active operator (currently selected) gets a purple ring */
+.btn--operator.is-active {
+  outline: 3px solid var(--color-purple);
+  outline-offset: 2px;
+}
+
+/* ----------------------------------------------------------
+   13. EQUALS BUTTON
+   Solid deep purple, white text, spans one column.
+   ---------------------------------------------------------- */
+.btn--equals {
+  /* Purple fill */
+  background-color: var(--color-purple);
+
+  /* White text for contrast */
+  color: var(--color-text-light);
+
+  /* Larger symbol */
+  font-size: 1.4rem;
+}
+
+/* Darken purple on hover */
+.btn--equals:hover {
+  background-color: var(--color-purple-dark);
+}
+
+/* ----------------------------------------------------------
+   14. ZERO BUTTON
+   Spans two columns to match the standard calculator layout.
+   ---------------------------------------------------------- */
+.btn--zero {
+  /* Stretch across 2 grid columns */
+  grid-column: span 2;
+
+  /* Left-align the "0" label inside the wide button */
+  text-align: left;
+  padding-left: 24px;
+}
+
+/* ----------------------------------------------------------
+   15. FOCUS STYLES (Accessibility)
+   Visible keyboard-focus ring using the purple accent.
+   ---------------------------------------------------------- */
+.btn:focus-visible {
+  outline: 3px solid var(--color-purple);
+  outline-offset: 3px;
+}
+
+/* ----------------------------------------------------------
+   16. RESPONSIVE ADJUSTMENT
+   On very narrow viewports, reduce the card padding and
+   button size slightly so nothing is clipped.
+   ---------------------------------------------------------- */
+@media (max-width: 360px) {
+  /* Tighten the card */
+  .calculator {
+    width: 100%;
+    padding: 20px 16px 16px;
+  }
+
+  /* Slightly smaller buttons */
+  .btn {
+    height: 56px;
+    font-size: 1rem;
+  }
+
+  /* Slightly smaller result text */
+  .display__result {
+    font-size: 2rem;
+  }
+}

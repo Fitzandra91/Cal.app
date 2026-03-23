@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!-- Main HTML document for the Calculator App -->
+<html lang="en">
+  <head>
+    <!-- Character encoding and viewport for responsive design -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cal.app – Calculator</title>
+
+    <!-- Link to the external stylesheet -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <!-- Outer wrapper centres the calculator on the page -->
+    <div class="page-wrapper">
+
+      <!-- Main calculator card -->
+      <div class="calculator" role="main" aria-label="Calculator">
+
+        <!-- App heading -->
+        <h1 class="app-title">Cal.app</h1>
+
+        <!-- Display panel shows the current expression and result -->
+        <div class="display" aria-live="polite">
+          <!-- Secondary row: shows the ongoing expression -->
+          <div class="display__expression" id="expression"></div>
+          <!-- Primary row: shows the current input / result -->
+          <div class="display__result" id="result">0</div>
+        </div>
+
+        <!-- Button grid: numbers, operators, and actions -->
+        <div class="button-grid">
+
+          <!-- Row 1: clear, sign toggle, percent, divide -->
+          <button class="btn btn--action" data-action="clear"    aria-label="Clear">AC</button>
+          <button class="btn btn--action" data-action="sign"     aria-label="Toggle sign">+/−</button>
+          <button class="btn btn--action" data-action="percent"  aria-label="Percent">%</button>
+          <button class="btn btn--operator" data-action="operator" data-value="÷" aria-label="Divide">÷</button>
+
+          <!-- Row 2: 7 8 9 multiply -->
+          <button class="btn btn--number" data-action="number" data-value="7">7</button>
+          <button class="btn btn--number" data-action="number" data-value="8">8</button>
+          <button class="btn btn--number" data-action="number" data-value="9">9</button>
+          <button class="btn btn--operator" data-action="operator" data-value="×" aria-label="Multiply">×</button>
+
+          <!-- Row 3: 4 5 6 subtract -->
+          <button class="btn btn--number" data-action="number" data-value="4">4</button>
+          <button class="btn btn--number" data-action="number" data-value="5">5</button>
+          <button class="btn btn--number" data-action="number" data-value="6">6</button>
+          <button class="btn btn--operator" data-action="operator" data-value="−" aria-label="Subtract">−</button>
+
+          <!-- Row 4: 1 2 3 add -->
+          <button class="btn btn--number" data-action="number" data-value="1">1</button>
+          <button class="btn btn--number" data-action="number" data-value="2">2</button>
+          <button class="btn btn--number" data-action="number" data-value="3">3</button>
+          <button class="btn btn--operator" data-action="operator" data-value="+" aria-label="Add">+</button>
+
+          <!-- Row 5: zero (wide), decimal, equals -->
+          <button class="btn btn--number btn--zero" data-action="number" data-value="0">0</button>
+          <button class="btn btn--number" data-action="decimal" aria-label="Decimal point">.</button>
+          <button class="btn btn--equals" data-action="equals" aria-label="Equals">=</button>
+
+        </div><!-- /.button-grid -->
+      </div><!-- /.calculator -->
+    </div><!-- /.page-wrapper -->
+
+    <!-- Link to the external JavaScript file -->
+    <script src="script.js"></script>
+  </body>
+</html>
