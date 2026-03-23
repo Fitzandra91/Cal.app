@@ -1,0 +1,244 @@
+/* ============================================================
+   style.css – Stylesheet for the Calculator App (Cal.app)
+   This file controls every visual aspect of the calculator:
+   colors, fonts, layout, button shapes, and hover effects.
+   ============================================================ */
+
+/* ------------------------------------------------------------------
+   1. CSS Reset / Base Styles
+   The * selector targets every element on the page.
+   "box-sizing: border-box" makes padding and border count
+   inside an element's declared width/height, preventing overflow.
+   "margin: 0" and "padding: 0" remove default browser spacing.
+   ------------------------------------------------------------------ */
+* {
+  box-sizing: border-box; /* include padding & border in element dimensions */
+  margin: 0;              /* remove default outer spacing */
+  padding: 0;             /* remove default inner spacing */
+}
+
+/* ------------------------------------------------------------------
+   2. Body Styles
+   The <body> is the visible canvas of the page.
+   "display: flex" turns the body into a flex container so we can
+   centre its single child (the calculator) both horizontally and
+   vertically.
+   "min-height: 100vh" stretches the body to at least the full
+   viewport height so centring works even on tall screens.
+   "background" uses a subtle diagonal gradient for visual depth.
+   ------------------------------------------------------------------ */
+body {
+  display: flex;            /* use Flexbox layout */
+  justify-content: center;  /* centre children horizontally */
+  align-items: center;      /* centre children vertically */
+  min-height: 100vh;        /* fill at least the full viewport height */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* readable sans-serif stack */
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); /* dark-blue gradient */
+}
+
+/* ------------------------------------------------------------------
+   3. Calculator Container
+   .calculator is the outer wrapper that holds the display and
+   the button grid.
+   "border-radius" rounds the corners for a modern, card-like look.
+   "box-shadow" adds a deep shadow to lift the card off the background.
+   "overflow: hidden" clips child elements to the rounded corners.
+   ------------------------------------------------------------------ */
+.calculator {
+  background: #1e1e2e;          /* very dark navy background */
+  border-radius: 20px;          /* round all four corners by 20px */
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5),  /* far, diffuse shadow */
+              0 10px 20px rgba(0, 0, 0, 0.3);  /* closer, sharper shadow */
+  overflow: hidden;             /* keep children inside the rounded box */
+  width: 320px;                 /* fixed width so layout stays consistent */
+}
+
+/* ------------------------------------------------------------------
+   4. Display Area
+   .display is the screen at the top of the calculator that shows
+   the current input and calculation result.
+   "padding" adds breathing room around the text.
+   "text-align: right" mimics a real calculator where numbers are
+   right-aligned.
+   ------------------------------------------------------------------ */
+.display {
+  background: #0d0d1a;          /* darker shade than the body to distinguish display */
+  padding: 20px 24px;           /* vertical and horizontal inner spacing */
+  text-align: right;            /* align numbers to the right edge */
+  border-bottom: 2px solid #2a2a4a; /* thin line separating display from buttons */
+}
+
+/* ------------------------------------------------------------------
+   4a. Previous Expression Line
+   .display .previous-expression shows the last completed expression
+   in small, dimmed text above the main number.
+   "min-height" reserves space even when the string is empty, so the
+   display does not jump in size.
+   ------------------------------------------------------------------ */
+.display .previous-expression {
+  color: #6c6c9a;           /* muted purple-grey for less visual weight */
+  font-size: 0.85rem;       /* smaller than the current value */
+  min-height: 1.2em;        /* always occupy one line of height */
+  margin-bottom: 6px;       /* gap between previous expression and current value */
+  overflow: hidden;         /* hide text that overflows horizontally */
+  text-overflow: ellipsis;  /* show "…" when text is clipped */
+  white-space: nowrap;      /* keep expression on a single line */
+}
+
+/* ------------------------------------------------------------------
+   4b. Current Value
+   .display .current-value is the large number currently being entered
+   or the result after pressing "=".
+   "word-break: break-all" prevents very long numbers from overflowing
+   the container by allowing a break anywhere.
+   ------------------------------------------------------------------ */
+.display .current-value {
+  color: #e0e0f0;           /* near-white with a slight purple tint */
+  font-size: 2.2rem;        /* large so the number is easy to read */
+  font-weight: 300;         /* thin weight for an elegant, modern feel */
+  word-break: break-all;    /* wrap at any character if the number is too long */
+  line-height: 1.2;         /* tighten line spacing for multi-line numbers */
+}
+
+/* ------------------------------------------------------------------
+   5. Button Grid
+   .buttons is a CSS Grid container that arranges all calculator
+   buttons in a 4-column layout.
+   "grid-template-columns: repeat(4, 1fr)" creates four equal columns.
+   "gap" adds consistent spacing between every cell.
+   ------------------------------------------------------------------ */
+.buttons {
+  display: grid;                          /* activate CSS Grid layout */
+  grid-template-columns: repeat(4, 1fr); /* four equal-width columns */
+  gap: 1px;                              /* 1px gap between buttons */
+  background: #2a2a4a;                   /* gap color (shows through grid gaps) */
+}
+
+/* ------------------------------------------------------------------
+   6. Individual Button Base Style
+   Every <button> element inside .buttons shares these styles.
+   "cursor: pointer" signals to the user that the element is clickable.
+   "transition" smoothly animates background-colour and transform
+   changes when the user hovers or clicks.
+   "border: none" removes the default browser button border.
+   ------------------------------------------------------------------ */
+.buttons button {
+  background: #1e1e2e;          /* same dark navy as the calculator body */
+  color: #e0e0f0;               /* near-white text */
+  border: none;                 /* remove default border */
+  padding: 20px;                /* generous padding for easy tapping on touch devices */
+  font-size: 1.1rem;            /* slightly larger than default browser font */
+  cursor: pointer;              /* hand cursor on hover */
+  transition: background 0.15s ease, transform 0.1s ease; /* smooth state changes */
+  outline: none;                /* remove focus outline (replaced by custom style below) */
+}
+
+/* ------------------------------------------------------------------
+   6a. Button Hover State
+   Slightly lighten the background when the mouse is over a button
+   to give clear visual feedback that the button is interactive.
+   ------------------------------------------------------------------ */
+.buttons button:hover {
+  background: #2a2a4e;  /* a shade lighter than the default button background */
+}
+
+/* ------------------------------------------------------------------
+   6b. Button Active (Pressed) State
+   Darken the background and scale the button down slightly to
+   simulate a physical key press.
+   ------------------------------------------------------------------ */
+.buttons button:active {
+  background: #12122a;           /* darker on press */
+  transform: scale(0.95);        /* shrink slightly to mimic pressing a key */
+}
+
+/* ------------------------------------------------------------------
+   6c. Button Focus State (Keyboard Accessibility)
+   When a button is focused via keyboard navigation, show a clearly
+   visible outline so the user knows which button is selected.
+   ------------------------------------------------------------------ */
+.buttons button:focus-visible {
+  outline: 2px solid #7b7bf5;  /* bright purple outline for keyboard focus */
+  outline-offset: -2px;         /* keep the outline inside the button boundary */
+}
+
+/* ------------------------------------------------------------------
+   7. Operator Button Style (.btn-operator)
+   Operator buttons (+, −, ×, ÷) use a contrasting colour to
+   distinguish them visually from digit buttons.
+   ------------------------------------------------------------------ */
+.btn-operator {
+  background: #252540 !important;  /* slightly lighter dark background */
+  color: #a0a0ff !important;       /* soft lavender text for operators */
+}
+
+/* Hover override for operator buttons */
+.btn-operator:hover {
+  background: #303060 !important;  /* a more visible shade on hover */
+}
+
+/* ------------------------------------------------------------------
+   8. Equals Button Style (.btn-equals)
+   The "=" button is the most important action, so it gets a vivid
+   accent colour to draw the user's attention.
+   ------------------------------------------------------------------ */
+.btn-equals {
+  background: #5a5af0 !important;  /* bright purple/indigo accent */
+  color: #ffffff !important;       /* white text for maximum contrast */
+  font-weight: 600 !important;     /* bolder text to emphasise the action */
+}
+
+/* Hover override for the equals button */
+.btn-equals:hover {
+  background: #6e6ef5 !important;  /* slightly lighter purple on hover */
+}
+
+/* ------------------------------------------------------------------
+   9. Special / Utility Button Style (.btn-special)
+   Buttons like "AC" (all clear), "+/−" (sign toggle), and "%"
+   (percentage) use a distinct muted colour so they are easy to find
+   but do not compete with the operator or equals buttons.
+   ------------------------------------------------------------------ */
+.btn-special {
+  background: #2a2a4a !important;  /* darker purple-grey */
+  color: #c0c0e0 !important;       /* lighter text than operators */
+}
+
+/* Hover override for special buttons */
+.btn-special:hover {
+  background: #3a3a5e !important;  /* slightly lighter on hover */
+}
+
+/* ------------------------------------------------------------------
+   10. Wide Button (.btn-wide)
+   The "0" button on a standard calculator spans two columns.
+   "grid-column: span 2" makes this button fill two grid cells.
+   ------------------------------------------------------------------ */
+.btn-wide {
+  grid-column: span 2;  /* occupy two columns in the button grid */
+  text-align: left;     /* left-align the "0" label (matches physical calculators) */
+  padding-left: 28px;   /* extra left padding to position the "0" nicely */
+}
+
+/* ------------------------------------------------------------------
+   11. Responsive Design
+   On screens narrower than 360 px (e.g. small smartphones) scale
+   the calculator down slightly so it still fits the viewport.
+   ------------------------------------------------------------------ */
+@media (max-width: 360px) {
+  .calculator {
+    width: 100%;          /* stretch to fill the narrow screen */
+    border-radius: 0;     /* remove rounded corners on very small screens */
+  }
+
+  /* Slightly reduce button padding to fit smaller screens */
+  .buttons button {
+    padding: 16px;      /* less padding than the default 20px */
+    font-size: 1rem;    /* slightly smaller text */
+  }
+
+  /* Reduce the main display number size on narrow screens */
+  .display .current-value {
+    font-size: 1.8rem;  /* smaller than the default 2.2rem */
+  }
+}
